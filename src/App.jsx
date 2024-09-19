@@ -45,6 +45,10 @@ function App() {
       sound: 'four',
     },
   ]
+
+  const minNumber = 0;
+  const maxNumber = 3;
+  const speedGame = 400;
 }
 
 export default App;
