@@ -49,6 +49,15 @@ function App() {
   const minNumber = 0;
   const maxNumber = 3;
   const speedGame = 400;
+
+  const [sequence, setSequence] = useState([]);
+  const [currentGame, setCurrentGame] = useState([]);
+  const [isAllowedGame, setIsAllowedGame] = useState(false);
+  const [speed, setSpeed] = useState(speedGame);
+  const [turn, setTurn] = useState(0);
+  const [pulses, setPulses] = useState(0);
+  const [success, setSuccess] = useState(0);
+  const [isGameOn, setIsGameOn] = useState(false);
 }
 
 export default App;
