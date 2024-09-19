@@ -52,7 +52,7 @@ function App() {
 
   const [sequence, setSequence] = useState([]);
   const [currentGame, setCurrentGame] = useState([]);
-  const [isAllowedGame, setIsAllowedGame] = useState(false);
+  const [isAllowedToPlay, setIsAllowedToPlay] = useState(false);
   const [speed, setSpeed] = useState(speedGame);
   const [turn, setTurn] = useState(0);
   const [pulses, setPulses] = useState(0);
@@ -95,6 +95,20 @@ function App() {
   }
   </>
   )
+}
+
+const initGame = () => {
+
+  randomNumber();
+  setIsGameOn(true);
+}
+
+const randomNumber = () => {
+
+  setIsAllowedToPlay(false);
+  const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
+  setSequence([...sequence, randomNumber]);
+  setTurn(turn + 1);
 }
 
 export default App;
