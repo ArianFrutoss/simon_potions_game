@@ -131,4 +131,80 @@ const handleClick = (index) => {
   }
 }
 
+useEffect(() => {
+
+  if(pulses > 0){
+
+    if (Number(sequence[pulses - 1]) === Number(currentGame[pulses - 1])){
+
+      setSuccess(success + 1);
+    }
+
+    else{
+
+      const index = sequence[pulses - 1];
+
+      if (index) colors[index].ref.current.style.opacity = (1);
+      play({id: 'error'});
+      setTimeout(() => {
+
+        if (index) colors[index].ref.current.style.opacity = (0.5);
+        setIsGameOn(false);
+      }, speed * 2)
+
+    setIsAllowedToPlay(false);
+    }
+  }
+}, [pulses])
+
+useEffect(() => {
+
+  if (!isGameOn) {
+    
+    setSequence([]);
+    setCurrentGame([]);
+    setIsAllowedToPlay(false);
+    setSpeed(speedGame);
+    setSuccess(0);
+    setPulses(0);
+    setTurn(0);
+  }
+}, [isGameOn])
+
+useEffect(() => {
+
+  if (success === sequence.length && success > 0){
+
+    setSpeed(speed - sequence.length * 2);
+    setTimeout(() => {
+
+      setSuccess(0);
+      setPulses(0);
+      setCurrentGame([]);
+      randomNumber();
+    }, 500)
+  }
+}, [success])
+
+useEffect(() => {
+
+  if(!isAllowedToPlay){
+
+    sequence.map((item, index) => {
+
+      setTimeout(() => {
+
+        play({id: colors[item].sound});
+        colors[item].ref.current.style.opacity = (1);
+
+        setTimeout(() => {
+
+          colors[item].ref.current.style.opacity = (0.5);
+        }, speed / 2)
+      }, speed * index)
+    })
+  }
+  setIsAllowedToPlay(true);
+}, [sequence])
+
 export default App;
