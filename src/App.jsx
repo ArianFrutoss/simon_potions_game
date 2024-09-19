@@ -19,8 +19,8 @@ function App() {
       three: [2000, 500],
       four: [3000, 500],
       error: [4000, 1000],
-    },
-  });
+    }
+  })
 
   const colors = [
 
@@ -109,6 +109,26 @@ const randomNumber = () => {
   const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
   setSequence([...sequence, randomNumber]);
   setTurn(turn + 1);
+}
+
+const handleClick = (index) => {
+
+  if (isAllowedToPlay){
+
+    play({id: colors[index].sound})
+    colors[index].ref.current.style.opacity = (1);
+    colors[index].ref.current.style.scale = (0.9);
+
+    setTimeout(() => {
+
+      colors[index].ref.current.style.opacity = (0.5);
+      colors[index].ref.current.style.scale = (1);
+      setCurrentGame([...currentGame, index]);
+      setPulses(pulses + 1);
+    },
+
+    speed / 2)
+  }
 }
 
 export default App;
