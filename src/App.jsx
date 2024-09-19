@@ -21,6 +21,30 @@ function App() {
       error: [4000, 1000],
     },
   });
+
+  const colors = [
+
+    {
+      color:'#FAF303',
+      ref: yellowRef,
+      sound: 'one',
+    },
+    {
+      color:'#030AFA',
+      ref: blueRef,
+      sound: 'two',
+    },
+    {
+      color:'#FA0E03',
+      ref: redRef,
+      sound: 'three',
+    },
+    {
+      color:'#0AFA03',
+      ref: greenRef,
+      sound: 'four',
+    },
+  ]
 }
 
 export default App;
