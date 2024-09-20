@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import useSound from 'use-sound';
 import simon from './assets/sounds/sprite.mp3';
-import './App.css'
+import './index.css';
+import './App.css';
 
 function App() {
   
@@ -51,13 +52,134 @@ function App() {
   const speedGame = 400;
 
   const [sequence, setSequence] = useState([]);
+  console.log(sequence);
   const [currentGame, setCurrentGame] = useState([]);
+  console.log(currentGame);
   const [isAllowedToPlay, setIsAllowedToPlay] = useState(false);
+  console.log(isAllowedToPlay);
   const [speed, setSpeed] = useState(speedGame);
+  console.log(speed);
   const [turn, setTurn] = useState(0);
+  console.log(turn);
   const [pulses, setPulses] = useState(0);
+  console.log(pulses);
   const [success, setSuccess] = useState(0);
+  console.log(success);
   const [isGameOn, setIsGameOn] = useState(false);
+  console.log(isGameOn);
+
+  const initGame = () => {
+
+    randomNumber();
+    setIsGameOn(true);
+  }
+  
+  const randomNumber = () => {
+  
+    setIsAllowedToPlay(false);
+    const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
+    setSequence([...sequence, randomNumber]);
+    setTurn(turn + 1);
+  }
+  
+  const handleClick = (index) => {
+  
+    if (isAllowedToPlay){
+  
+      play({id: colors[index].sound})
+      colors[index].ref.current.style.opacity = (1);
+      colors[index].ref.current.style.scale = (0.9);
+  
+      setTimeout(() => {
+  
+        colors[index].ref.current.style.opacity = (0.5);
+        colors[index].ref.current.style.scale = (1);
+        setCurrentGame([...currentGame, index]);
+        setPulses(pulses + 1);
+      },
+  
+      speed / 2)
+    }
+  }
+  
+  useEffect(() => {
+  
+    if(pulses > 0){
+  
+      if (Number(sequence[pulses - 1]) === Number(currentGame[pulses - 1])){
+  
+        setSuccess(success + 1);
+      }
+  
+      else{
+  
+        const index = sequence[pulses - 1];
+  
+        if (index) colors[index].ref.current.style.opacity = (1);
+        play({id: 'error'});
+        setTimeout(() => {
+  
+          if (index) colors[index].ref.current.style.opacity = (0.5);
+          setIsGameOn(false);
+        }, speed * 2)
+  
+      setIsAllowedToPlay(false);
+      }
+    }
+  }, [pulses])
+  
+  useEffect(() => {
+  
+    if (!isGameOn) {
+      
+      setSequence([]);
+      setCurrentGame([]);
+      setIsAllowedToPlay(false);
+      setSpeed(speedGame);
+      setSuccess(0);
+      setPulses(0);
+      setTurn(0);
+    }
+  }, [isGameOn])
+  
+  useEffect(() => {
+  
+    if (success === sequence.length && success > 0){
+  
+      setSpeed(speed - sequence.length * 2);
+      setTimeout(() => {
+  
+        setSuccess(0);
+        setPulses(0);
+        setCurrentGame([]);
+        randomNumber();
+      }, 500)
+    }
+  }, [success])
+  
+  useEffect(() => {
+  
+    if(!isAllowedToPlay){
+  
+      sequence.map((item, index) => {
+        
+        if (colors[item] != null){
+
+          setTimeout(() => {
+  
+            play({id: colors[item].sound});
+            colors[item].ref.current.style.opacity = (1);
+    
+            setTimeout(() => {
+    
+              colors[item].ref.current.style.opacity = (0.5);
+            }, speed / 2)
+          }, speed * index)
+        }
+      })
+    }
+    setIsAllowedToPlay(true);
+  }, [sequence])
 
   return (
     <>
@@ -73,7 +195,7 @@ function App() {
         {colors.map((item, index) => {
 
           return (
-            <div
+            <div 
               key={index}
               ref={item.ref}
               className={`pad pad-${index}`}
@@ -96,115 +218,5 @@ function App() {
   </>
   )
 }
-
-const initGame = () => {
-
-  randomNumber();
-  setIsGameOn(true);
-}
-
-const randomNumber = () => {
-
-  setIsAllowedToPlay(false);
-  const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
-  setSequence([...sequence, randomNumber]);
-  setTurn(turn + 1);
-}
-
-const handleClick = (index) => {
-
-  if (isAllowedToPlay){
-
-    play({id: colors[index].sound})
-    colors[index].ref.current.style.opacity = (1);
-    colors[index].ref.current.style.scale = (0.9);
-
-    setTimeout(() => {
-
-      colors[index].ref.current.style.opacity = (0.5);
-      colors[index].ref.current.style.scale = (1);
-      setCurrentGame([...currentGame, index]);
-      setPulses(pulses + 1);
-    },
-
-    speed / 2)
-  }
-}
-
-useEffect(() => {
-
-  if(pulses > 0){
-
-    if (Number(sequence[pulses - 1]) === Number(currentGame[pulses - 1])){
-
-      setSuccess(success + 1);
-    }
-
-    else{
-
-      const index = sequence[pulses - 1];
-
-      if (index) colors[index].ref.current.style.opacity = (1);
-      play({id: 'error'});
-      setTimeout(() => {
-
-        if (index) colors[index].ref.current.style.opacity = (0.5);
-        setIsGameOn(false);
-      }, speed * 2)
-
-    setIsAllowedToPlay(false);
-    }
-  }
-}, [pulses])
-
-useEffect(() => {
-
-  if (!isGameOn) {
-    
-    setSequence([]);
-    setCurrentGame([]);
-    setIsAllowedToPlay(false);
-    setSpeed(speedGame);
-    setSuccess(0);
-    setPulses(0);
-    setTurn(0);
-  }
-}, [isGameOn])
-
-useEffect(() => {
-
-  if (success === sequence.length && success > 0){
-
-    setSpeed(speed - sequence.length * 2);
-    setTimeout(() => {
-
-      setSuccess(0);
-      setPulses(0);
-      setCurrentGame([]);
-      randomNumber();
-    }, 500)
-  }
-}, [success])
-
-useEffect(() => {
-
-  if(!isAllowedToPlay){
-
-    sequence.map((item, index) => {
-
-      setTimeout(() => {
-
-        play({id: colors[item].sound});
-        colors[item].ref.current.style.opacity = (1);
-
-        setTimeout(() => {
-
-          colors[item].ref.current.style.opacity = (0.5);
-        }, speed / 2)
-      }, speed * index)
-    })
-  }
-  setIsAllowedToPlay(true);
-}, [sequence])
 
 export default App;
