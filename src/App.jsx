@@ -54,7 +54,7 @@ function App() {
 
   const minNumber = 0;
   const maxNumber = 3;
-  const speedGame = 400;
+  const speedGame = 300;
 
   const [sequence, setSequence] = useState([]);
   console.log(sequence);
@@ -75,7 +75,11 @@ function App() {
 
   const initGame = () => {
 
-    randomNumber();
+    setTimeout(() => {
+
+      randomNumber();
+    }, 1000)
+
     setIsGameOn(true);
   }
   
