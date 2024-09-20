@@ -4,6 +4,11 @@ import simon from './assets/sounds/sprite.mp3';
 import './index.css';
 import './App.css';
 
+import yellowImage from './assets/imgs/yellow_potion.png';
+import blueImage from './assets/imgs/blue_potion.png';
+import redImage from './assets/imgs/red_potion.png';
+import greenImage from './assets/imgs/green_potion.png';
+
 function App() {
   
   const blueRef = useRef(null);
@@ -26,22 +31,22 @@ function App() {
   const colors = [
 
     {
-      color:'#FAF303',
-      ref: yellowRef,
-      sound: 'one',
-    },
-    {
-      color:'#030AFA',
-      ref: blueRef,
-      sound: 'two',
-    },
-    {
-      color:'#FA0E03',
+      image: redImage,
       ref: redRef,
       sound: 'three',
     },
     {
-      color:'#0AFA03',
+      image: yellowImage,
+      ref: yellowRef,
+      sound: 'one',
+    },
+    {
+      image: blueImage,
+      ref: blueRef,
+      sound: 'two',
+    },
+    {
+      image: greenImage,
       ref: greenRef,
       sound: 'four',
     },
@@ -88,11 +93,11 @@ function App() {
   
       play({id: colors[index].sound})
       colors[index].ref.current.style.opacity = (1);
-      colors[index].ref.current.style.scale = (0.9);
+      colors[index].ref.current.style.scale = (1);
   
       setTimeout(() => {
   
-        colors[index].ref.current.style.opacity = (0.5);
+        colors[index].ref.current.style.opacity = (0);
         colors[index].ref.current.style.scale = (1);
         setCurrentGame([...currentGame, index]);
         setPulses(pulses + 1);
@@ -115,11 +120,11 @@ function App() {
   
         const index = sequence[pulses - 1];
   
-        if (index) colors[index].ref.current.style.opacity = (1);
+        if (index) colors[index].ref.current.style.opacity = (0);
         play({id: 'error'});
         setTimeout(() => {
   
-          if (index) colors[index].ref.current.style.opacity = (0.5);
+          if (index) colors[index].ref.current.style.opacity = (0);
           setIsGameOn(false);
         }, speed * 2)
   
@@ -172,7 +177,7 @@ function App() {
     
             setTimeout(() => {
     
-              colors[item].ref.current.style.opacity = (0.5);
+              colors[item].ref.current.style.opacity = (0);
             }, speed / 2)
           }, speed * index)
         }
@@ -199,9 +204,10 @@ function App() {
               key={index}
               ref={item.ref}
               className={`pad pad-${index}`}
-              style={{backgroundColor:`${item.color}`, opacity:0.6}}
+              style={{ opacity: 0 }}
               onClick={() => handleClick(index)}
             >
+              <img src={item.image} alt={`color-${index}`}/>
             </div>
           )
         })}
